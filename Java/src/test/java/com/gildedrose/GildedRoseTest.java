@@ -1,6 +1,10 @@
 package com.gildedrose;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.sql.Array;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,24 +18,43 @@ class GildedRoseTest {
         assertEquals("fixme", app.items[0].name);
     }
 
-    @Test
-    void copy_golden_master(int sellin, int quality) {
+    @ParameterizedTest
+    @CsvSource({
+        "+5 Dexterity Vest, -1, 50, 0, 81",
+        "Aged Brie, -1, 50, 0, 81",
+        "Backstage passes to a TAFKAL80ETC concert, -1, 50, 0, 81",
+        "'Sulfuras, Hand of Ragnaros', -1, 50, 0, 81"
+    })
+    void copy_golden_master(String itemName, int sellInStart, int sellInEnd, int qualityStart, int qualityEnd) {
 
-        Item[] items = new Item[]{
-            new Item("+5 Dexterity Vest", sellin, quality)
-        };
-        Item[] goldenItems = new Item[]{
-            new Item("+5 Dexterity Vest", sellin, quality)
-        };
+        int arraySize = (sellInEnd - sellInStart) * (qualityEnd - qualityStart);
+        Item[] items = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
+
+        Item[] goldenItems = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
 
         GildedRose app = new GildedRose(items);
-        GoldenGildedRose goldenApp = new GoldenGildedRose(items);
+        GoldenGildedRose goldenApp = new GoldenGildedRose(goldenItems);
 
         app.updateQuality();
         goldenApp.updateQuality();
 
-        assertEquals(items[0].sellIn, goldenItems[0].sellIn);
-        assertEquals(items[0].quality, goldenItems[0].quality);
+        for(int i =0; i < items.length; i++ ) {
+            assertEquals(items[i].sellIn, goldenItems[i].sellIn, itemName);
+            assertEquals(items[i].quality, goldenItems[i].quality, itemName);
+        }
+    }
+
+    private Item[] createItems(String itemName, int sellInStart, int sellInEnd, int qualityStart, int qualityEnd, int arraySize) {
+        Item[] items = new Item[arraySize];
+
+        int i = 0;
+        for(int sellIn = sellInStart; sellIn < sellInEnd; sellIn++){
+            for(int quality = qualityStart; quality < qualityEnd; quality++){
+                items[i] = new Item(itemName, sellIn, quality);
+                i++;
+            }
+        }
+        return items;
     }
 
     @Test
