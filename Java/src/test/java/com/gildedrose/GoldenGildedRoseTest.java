@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GoldenGildedRoseTest {
@@ -22,8 +20,8 @@ class GoldenGildedRoseTest {
         int arraySize = (sellInEnd - sellInStart) * (qualityEnd - qualityStart);
 
         Item[] originalItems = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
-        Item[] items = Arrays.copyOf(originalItems, originalItems.length);
-        Item[] goldenItems = Arrays.copyOf(originalItems, originalItems.length);
+        Item[] items = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
+        Item[] goldenItems = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
 
         GildedRose app = new GildedRose(items);
         GoldenGildedRose goldenApp = new GoldenGildedRose(goldenItems);
