@@ -25,9 +25,9 @@ public class BaseItem {
         }
     }
 
-    protected void decrementQuality() {
+    protected void decrementQualityBy(int value) {
         if (item.quality > 0) {
-            item.quality--;
+            item.quality -= value;
         }
     }
 

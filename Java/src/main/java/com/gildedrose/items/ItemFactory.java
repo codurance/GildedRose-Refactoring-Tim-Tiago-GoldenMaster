@@ -14,6 +14,9 @@ public class ItemFactory {
         if (SulfurasItem.is(item)) {
             return new SulfurasItem(item);
         }
+        if (ConjuredItem.is(item)) {
+            return new ConjuredItem(item);
+        }
         return new RegularItem(item);
     }
 }
