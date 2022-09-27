@@ -2,7 +2,7 @@ package com.gildedrose.items;
 
 import com.gildedrose.Item;
 
-public class BaseItem {
+public abstract class BaseItem {
 
     private final Item item;
 
@@ -10,7 +10,7 @@ public class BaseItem {
         this.item = item;
     }
 
-    public void updateQuality() {}
+    public abstract void updateQuality();
 
     protected boolean isSellInBelow(int value) {
         return item.sellIn < value;

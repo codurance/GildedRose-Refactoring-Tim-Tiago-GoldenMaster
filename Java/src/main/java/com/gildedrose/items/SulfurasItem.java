@@ -12,4 +12,6 @@ public class SulfurasItem extends BaseItem {
         return item.name.equals("Sulfuras, Hand of Ragnaros");
     }
 
+    @Override
+    public void updateQuality() { }
 }
