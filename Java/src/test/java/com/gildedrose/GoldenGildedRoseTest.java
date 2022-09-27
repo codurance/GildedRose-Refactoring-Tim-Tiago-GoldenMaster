@@ -4,19 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.sql.Array;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GildedRoseTest {
-
-    @Test
-    void foo() {
-        Item[] items = new Item[] { new Item("foo", 0, 0) };
-        GildedRose app = new GildedRose(items);
-        app.updateQuality();
-        assertEquals("fixme", app.items[0].name);
-    }
+class GoldenGildedRoseTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -28,8 +18,8 @@ class GildedRoseTest {
     void copy_golden_master(String itemName, int sellInStart, int sellInEnd, int qualityStart, int qualityEnd) {
 
         int arraySize = (sellInEnd - sellInStart) * (qualityEnd - qualityStart);
+        Item[] originalItems = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
         Item[] items = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
-
         Item[] goldenItems = createItems(itemName, sellInStart, sellInEnd, qualityStart, qualityEnd, arraySize);
 
         GildedRose app = new GildedRose(items);
@@ -39,8 +29,8 @@ class GildedRoseTest {
         goldenApp.updateQuality();
 
         for(int i =0; i < items.length; i++ ) {
-            assertEquals(items[i].sellIn, goldenItems[i].sellIn, itemName);
-            assertEquals(items[i].quality, goldenItems[i].quality, itemName);
+            assertEquals(items[i].sellIn, goldenItems[i].sellIn, itemName + " originalSellIn=" + originalItems[i].sellIn + " originalQuality=" + originalItems[i].quality);
+            assertEquals(items[i].quality, goldenItems[i].quality, itemName + " originalSellIn=" + originalItems[i].sellIn + " originalQuality=" + originalItems[i].quality);
         }
     }
 
