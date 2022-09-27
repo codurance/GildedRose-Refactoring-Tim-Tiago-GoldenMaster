@@ -20,47 +20,33 @@ class GildedRose {
     }
 
     private void updateRegular(Item item) {
-        if (item.quality > 0) {
-            decrementQuality(item);
-        }
-        item.sellIn--;
+        decrementSellIn(item);
+        decrementQuality(item);
         if (item.sellIn < 0) {
-            if (item.quality > 0) {
-                decrementQuality(item);
-            }
+            decrementQuality(item);
         }
     }
 
     private void updateBackstage(Item item) {
-        if (item.quality < 50) {
-            incrementQuality(item);
+        decrementSellIn(item);
+        incrementQuality(item);
 
-            if (item.sellIn < 11) {
-                if (item.quality < 50) {
-                    incrementQuality(item);
-                }
-            }
-            if (item.sellIn < 6) {
-                if (item.quality < 50) {
-                    incrementQuality(item);
-                }
-            }
+        if (item.sellIn < 10 ) {
+            incrementQuality(item);
         }
-        item.sellIn--;
+        if (item.sellIn < 5) {
+            incrementQuality(item);
+        }
         if (item.sellIn < 0) {
             zeroQuality(item);
         }
     }
 
     private void updateAgedBrie(Item item) {
-        if (item.quality < 50) {
-            incrementQuality(item);
-        }
-        item.sellIn--;
+        decrementSellIn(item);
+        incrementQuality(item);
         if (item.sellIn < 0) {
-            if (item.quality < 50) {
-                incrementQuality(item);
-            }
+            incrementQuality(item);
         }
     }
 
@@ -76,16 +62,20 @@ class GildedRose {
         return item.name.equals("Aged Brie");
     }
 
-    private boolean isRegularItem(Item item) {
-        return !isAgedBrie(item) && !isBackstage(item) && !isSulfuras(item);
-    }
-
     private void incrementQuality(Item item) {
-        item.quality++;
+        if (item.quality < 50) {
+            item.quality++;
+        }
     }
 
     private void decrementQuality(Item item) {
-        item.quality--;
+        if (item.quality > 0) {
+            item.quality--;
+        }
+    }
+
+    private void decrementSellIn(Item item) {
+        item.sellIn--;
     }
 
     private void zeroQuality(Item item) {
