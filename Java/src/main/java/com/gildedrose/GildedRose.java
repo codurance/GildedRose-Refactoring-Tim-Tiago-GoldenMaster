@@ -8,49 +8,58 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (isAgedBrie(items[i]) || isBackstage(items[i])) {
-                if (items[i].quality < 50) {
-                    incrementQuality(items[i]);
+        for (Item item : items) {
+            if (isAgedBrie(item)) {
+                updateAgedBrie(item);
+            } else if (isBackstage(item)) {
+                updateBackstage(item);
+            } else if (!isSulfuras(item)) {
+                updateRegular(item);
+            }
+        }
+    }
 
-                    if (isBackstage(items[i])) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                incrementQuality(items[i]);
-                            }
-                        }
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                incrementQuality(items[i]);
-                            }
-                        }
-                    }
-                }
-            } else if (!isSulfuras(items[i])){
-                if (items[i].quality > 0) {
-                    decrementQuality(items[i]);
+    private void updateRegular(Item item) {
+        if (item.quality > 0) {
+            decrementQuality(item);
+        }
+        item.sellIn--;
+        if (item.sellIn < 0) {
+            if (item.quality > 0) {
+                decrementQuality(item);
+            }
+        }
+    }
+
+    private void updateBackstage(Item item) {
+        if (item.quality < 50) {
+            incrementQuality(item);
+
+            if (item.sellIn < 11) {
+                if (item.quality < 50) {
+                    incrementQuality(item);
                 }
             }
-
-            if (!isSulfuras(items[i])) {
-                items[i].sellIn--;
-            }
-
-            if (items[i].sellIn < 0) {
-                if (isAgedBrie(items[i])) {
-                    if (items[i].quality < 50) {
-                        incrementQuality(items[i]);
-                    }
-                } else {
-                    if (isBackstage(items[i])) {
-                        zeroQuality(items[i]);
-                    } else {
-                        if (!isSulfuras(items[i])) {
-                            if (items[i].quality > 0) {
-                                decrementQuality(items[i]);}
-                        }
-                    }
+            if (item.sellIn < 6) {
+                if (item.quality < 50) {
+                    incrementQuality(item);
                 }
+            }
+        }
+        item.sellIn--;
+        if (item.sellIn < 0) {
+            zeroQuality(item);
+        }
+    }
+
+    private void updateAgedBrie(Item item) {
+        if (item.quality < 50) {
+            incrementQuality(item);
+        }
+        item.sellIn--;
+        if (item.sellIn < 0) {
+            if (item.quality < 50) {
+                incrementQuality(item);
             }
         }
     }
